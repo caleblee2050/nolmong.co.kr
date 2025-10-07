@@ -25,8 +25,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        gcloud builds submit --tag asia-northeast3-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app
+        gcloud builds submit --tag asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest
 
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy nolmong-service --image asia-northeast3-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app --platform managed --region asia-northeast3 --allow-unauthenticated --port=8080
+        gcloud run deploy nolmong-service --image asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest --platform managed --region asia-northeast1 --allow-unauthenticated --port=8080
