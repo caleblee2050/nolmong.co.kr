@@ -1,0 +1,9 @@
+// Stub for IDE preview requesting /@vite/client on a non-Vite project.
+// Purpose: prevent noisy 404 logs from the python http.server during local preview.
+// This file is harmless and not used by the site.
+
+export function connect() {
+  // no-op: Vite HMR client is not in use here.
+}
+
+export default {};
