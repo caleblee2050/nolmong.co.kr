@@ -1,0 +1,32 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: 'auth'
+      uses: google-github-actions/auth@v1
+      with:
+        workload_identity_provider: 'projects/mcp-gdrive-2025/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+        service_account: 'github-actions-sa@mcp-gdrive-2025.iam.gserviceaccount.com'
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Build and push Docker image
+      run: |
+        gcloud builds submit --tag asia-northeast3-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy nolmong-service --image asia-northeast3-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app --platform managed --region asia-northeast3 --allow-unauthenticated --port=8080
