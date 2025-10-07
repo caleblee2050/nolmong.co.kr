@@ -1,0 +1,20 @@
+.git
+.github/
+.trae/
+@vite/
+node_modules/
+.DS_Store
+*.md
+README.md
+LICENSE
+
+# Exclude CI configs from image
+.github/**
+
+# Keep only site assets
+!index.html
+!styles.css
+!script.js
+!robots.txt
+!sitemap.xml
+!nginx.conf

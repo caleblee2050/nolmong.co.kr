@@ -12,21 +12,24 @@ jobs:
       id-token: write
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - id: 'auth'
-      uses: google-github-actions/auth@v1
-      with:
-        workload_identity_provider: 'projects/mcp-gdrive-2025/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-        service_account: 'github-actions-sa@mcp-gdrive-2025.iam.gserviceaccount.com'
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/759495199631/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@mcp-gdrive-2025.iam.gserviceaccount.com'
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-    - name: Build and push Docker image
-      run: |
-        gcloud builds submit --tag asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest
+      - name: Set default project
+        run: gcloud config set project mcp-gdrive-2025
 
-    - name: Deploy to Cloud Run
-      run: |
-        gcloud run deploy nolmong-service --image asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest --platform managed --region asia-northeast1 --allow-unauthenticated --port=8080
+      - name: Build and push Docker image
+        run: |
+          gcloud builds submit --tag asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy nolmong-service --image asia-northeast1-docker.pkg.dev/mcp-gdrive-2025/nolmong-repo/nolmong-app:latest --platform managed --region asia-northeast1 --allow-unauthenticated --port=8080
